@@ -1,0 +1,1 @@
+clang++ %1 -O0 -glldb -std=c++20 -IC:/my_lib/ -IC:/libs/nana/include -lgdiplus -lgdi32 -lole32 -luser32 -lshell32 -lComdlg32 -lC:\libs\_built_libs\nana

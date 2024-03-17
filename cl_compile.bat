@@ -1,0 +1,1 @@
+cl %1 -std:c++20 -IC:\my_lib -IC:\libs\nana\include gdiplus.lib gdi32.lib ole32.lib user32.lib shell32.lib Comdlg32.lib C:\libs\_built_libs\nana.lib

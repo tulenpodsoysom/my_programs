@@ -1,0 +1,5 @@
+CompileFlags: # Tweak the parse settings
+  Add: 
+    - "-std=c++23"
+    - "-IC:\\my_lib"
+    - "-IC:\\libs\\nana\\include"

@@ -107,39 +107,14 @@ void electrostatic_sim::prepare() {
 
 
 	for (auto &i : v.upper_triangles) {
-		// auto t = geometry::expand_triangle(i, 0.85);
-		// auto a = sub_points(t,5);
-		
-
-		// noise(t.p1);
-		// noise(t.p2);
-		// noise(t.p3);
-
 		auto p = geometry::middle_point({i.p1, i.p2, i.p3});
-		//noise(p);
-		// v.delone.superstructure_nodes.insert(v.delone.superstructure_nodes.end(),
-			// a.begin(),a.end());
 		v.delone.superstructure_nodes.push_back(p);
-		// v.delone.superstructure_nodes.insert(
-			// v.delone.superstructure_nodes.end(), {t.p1, t.p2, t.p3});
 	}
 	for (auto &i : v.lower_triangles) {
-		// auto t = geometry::expand_triangle(i, 0.85);
-		// auto a = sub_points(t,5);
-		// noise(t.p1);
-		// noise(t.p2);
-		// noise(t.p3);
-
 		auto p = geometry::middle_point({i.p1, i.p2, i.p3});
-		//noise(p);
-				// v.delone.superstructure_nodes.insert(v.delone.superstructure_nodes.end(),
-			// a.begin(),a.end());
 		v.delone.superstructure_nodes.push_back(p);
-		// v.delone.superstructure_nodes.insert(
-			// v.delone.superstructure_nodes.end(), {t.p1, t.p2, t.p3});
 	}
 
-	//auto all_nodes = std::ranges::join_view(std::vector{v.nodes,v.triangle_edge_nodes});
 
 	size_t before_insert = v.nodes.size();
 	v.nodes.insert(v.nodes.end(),v.triangle_edge_nodes.begin(),v.triangle_edge_nodes.end());
@@ -160,10 +135,10 @@ void electrostatic_sim::prepare() {
 		}	
 		v.triang_data = std::move(buffer);
 	}
-	
-
-	
-
+	v.node_values.resize(v.nodes.size());
 	variables_mutex.unlock();
 }
-void electrostatic_sim::cycle_function() {}
+void electrostatic_sim::cycle_function() {
+	
+
+}

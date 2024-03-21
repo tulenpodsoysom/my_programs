@@ -1,15 +1,18 @@
+#ifndef KAZF_H
+
 
 #include <math.h>
 // ����� ��������
-void kazf(float *a, float *b, float *x, int nn, int ny) {
+template <typename T>
+void kazf(T *a, T *b, T *x, int nn, int ny) {
 	// nn - ���������� �����������;  ny - ���������� ���������
-	float eps = 1.e-6f;
-	// float s;
+	double eps = 1.e-6f;
+	// double s;
 	int i, j, k;
-	float s1, s2, fa1, t;
-	float *x1;
+	double s1, s2, fa1, t;
+	double *x1;
 
-	x1 = new float[nn];
+	x1 = new double[nn];
 
 	x[0] = 0.5f;
 	for (i = 1; i < nn; i++)
@@ -39,8 +42,11 @@ void kazf(float *a, float *b, float *x, int nn, int ny) {
 			s1 += (x[i] - x1[i]) * (x[i] - x1[i]);
 			s2 += x[i] * x[i];
 		}
-		s1 = (float)sqrt(s1);
-		s2 = (float)sqrt(s2);
+		s1 = (double)sqrt(s1);
+		s2 = (double)sqrt(s2);
 	}
 	delete[] x1;
 }
+
+#endif //KAZF_H 
+#define KAZF_H

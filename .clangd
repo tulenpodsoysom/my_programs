@@ -3,3 +3,4 @@ CompileFlags: # Tweak the parse settings
     - "-std=c++23"
     - "-IC:\\my_lib"
     - "-IC:\\libs\\nana\\include"
+    - "-IC:\\libs\\armadillo-12.8.1\\include"

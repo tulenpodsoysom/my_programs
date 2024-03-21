@@ -1,5 +1,6 @@
 #ifndef PROGRAM_H
 #include <physics/physical_system/triangulation_delone.hpp>
+#include <physics/physical_system/isolines.hpp>
 #include <random>
 #include <time_flow_program.hpp>
 
@@ -62,7 +63,7 @@ struct parameters {
 	size_t nodes_size_width{20};
 	size_t nodes_size_height{20};
 
-	double capacitor_charge = 1;
+	double capacitor_charge = 0.1;
 };
 
 struct variables {
@@ -76,6 +77,8 @@ struct variables {
 
 	std::vector<triangulation_delone::triangulation_data> triang_data;
 
+	std::vector<std::pair<geometry::point2d,geometry::point2d>> isolines;
+
 	//auto all_nodes_view() {return std::ranges::join_view({nodes,triangle_edge_nodes});}
 };
 
@@ -86,7 +89,8 @@ struct electrostatic_sim : public time_flow_program<parameters, variables> {
 	noise_applier noise{rd};
 
 	void prepare() override;
-	void cycle_function() override;
+	void cycle_function() override {};
+	void evaluate();
 };
 
 #endif // PROGRAM_H

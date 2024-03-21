@@ -46,6 +46,8 @@ struct main_window : public form {
     timer render_timer;
 	textbox info_textbox{*this};
 
+	std::stringstream ss;
+
     create_form(offset_1_x, 0.1);
     create_form(offset_1_y, 0.1);
     create_form(offset_2_x, 0.1);
@@ -62,6 +64,7 @@ struct main_window : public form {
 
 	void update_program()
     {
+		program.clear();
         auto& p = program.p;
         p.triangle_offset_1 = {offset_1_x.value_.to_double(),offset_1_y.value_.to_double()};
         p.triangle_offset_2 = {offset_2_x.value_.to_double(),offset_2_y.value_.to_double()};
@@ -82,6 +85,8 @@ struct main_window : public form {
 	main_window() : form(API::make_center(800, 800)) {
         renderer_.observer = &program;
 
+		
+
 		place_.div("<vert<renderer>|25%<addinfo>>|30%<vert <vert "
 				   "parameters>|25%<vert buttons>> margin = 10");
 		place_["renderer"] << renderer_;
@@ -93,15 +98,16 @@ struct main_window : public form {
 		place_["addinfo"] << info_textbox;
 
 		startstop_button.events().click([&]() {
-			static bool running = false;
-			running = !running;
-			if (running) {
-				startstop_button.caption("Стоп");
-               program.start_loop();
-			} else {
-				startstop_button.caption("Старт");
-               program.stop_loop();
-			}
+			// static bool running = false;
+			// running = !running;
+			// if (running) {
+			// 	startstop_button.caption("Стоп");
+            //    program.start_loop();
+			// } else {
+			// 	startstop_button.caption("Старт");
+            //    program.stop_loop();
+			// }
+			std::thread([&]{program.evaluate();}).detach();
 		});
 		update_button.events().click([&] {
 			std::thread([&]{update_button.enabled(false); update_program(); update_button.enabled(true);}).detach();
@@ -111,6 +117,9 @@ struct main_window : public form {
 
 		render_timer.elapse([&] {
 			API::refresh_window(*this);
+
+			std::string s;
+			//info_textbox.append()
 			//std::string s;
 			
 			//for (auto& i : program.v.nodes) {

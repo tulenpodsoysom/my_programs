@@ -81,7 +81,7 @@ struct renderer_widget_base : public panel<true> {
 	void draw_widget(paint::graphics& g) {
 		if (g.empty()) return;
 		Graphics graph((HDC)g.context());
-		graph.SetSmoothingMode(Gdiplus::SmoothingModeDefault);
+		graph.SetSmoothingMode(Gdiplus::SmoothingModeHighQuality);
 		accommodate();
 		graph.SetTransform(transform_matrix);
 
@@ -102,6 +102,9 @@ struct renderer_widget : public renderer_widget_base<electrostatic_sim> {
 			return;
 
 		if (observer->variables_mutex.try_lock() == false) return;
+		
+
+		auto [z_min,z_max] = std::minmax_element(observer->v.node_values.begin(),observer->v.node_values.end());
 
 		for (auto i = 0; i < observer->v.nodes.size(); i++) {
 			auto &n = observer->v.nodes;
@@ -116,15 +119,25 @@ struct renderer_widget : public renderer_widget_base<electrostatic_sim> {
 		{
 			auto& ind = i.indexes;
 
+
 			PointF p[3] = {
 				{(REAL)observer->v.nodes[ind[0]].x(),(REAL)observer->v.nodes[ind[0]].y()},
 				{(REAL)observer->v.nodes[ind[1]].x(),(REAL)observer->v.nodes[ind[1]].y()},
 				{(REAL)observer->v.nodes[ind[2]].x(),(REAL)observer->v.nodes[ind[2]].y()}};
 
-			Pen pen(Color(63,0,0,255),0.0);
+			Pen pen(Color(31,0,0,255),0.0);
 
 			graph->DrawPolygon(&pen,p,3);
+			if ((z_min != observer->v.node_values.end()) &&
+				(z_max != observer->v.node_values.end())) {
+				double mean = observer->v.node_values[ind[0]] + observer->v.node_values[ind[1]] + observer->v.node_values[ind[2]];
+				mean /= 3.0;
+				int b = 255 * (mean - *z_min) / (*z_max - *z_min);
+				SolidBrush brush(Color(127,255,255,b));
+				graph->FillPolygon(&brush,p,3);
+			}
 		}
+
 
 		Pen pen(Color(31,255,0,0),0.0);
 		for (auto &i : observer->v.lower_triangles) {
@@ -138,6 +151,12 @@ struct renderer_widget : public renderer_widget_base<electrostatic_sim> {
 								  PointF(i.p2.x(), i.p2.y()),
 								  PointF(i.p3.x(), i.p3.y())};
 			graph->DrawPolygon(&pen, triangle, 3);
+		}
+
+		for (auto& i : observer->v.isolines) {
+			PointF p1(i.first.x(),i.first.y());
+			PointF p2(i.second.x(),i.second.y());
+			graph->DrawLine(pens[1],p1,p2);
 		}
 
 

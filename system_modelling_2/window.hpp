@@ -30,13 +30,12 @@ struct form_widget : public panel<false> {
 	}
 };
 
-//template <class program_t>
 struct main_window : public form {
     #define create_form(NAME,INIT_VALUE) form_widget NAME{*this,#NAME + std::string(":"),#INIT_VALUE}
 	drawing drawer_{*this};
 	place place_{*this};
 
-    electrostatic_sim program;
+    electrolamp_sim program;
 	renderer_widget renderer_{*this};
 
 
